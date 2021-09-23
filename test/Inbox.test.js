@@ -19,16 +19,20 @@ beforeEach(async () => {
 
 describe("Inbox", () => {
     it("deploys a contract", () => {
-        //is this a defined value
         assert.ok(deployedInbox.options.address)
     });
 
     it("has a default message", async () => {
-        //is this a defined value
-
-        const message = await deployedInbox.methods.message().call();
+        const message = await deployedInbox.methods.getMessage().call();
         console.log(message);
         assert.equal(message, 'Hi Jalal from SC')
+    });
+
+    it("message does update", async () => {
+       await deployedInbox.methods.setMessage("TEST DATA").send({from:fetchedAcccounts[0]});
+       const message = await deployedInbox.methods.getMessage().call();
+       console.log(message);
+       assert.equal(message, 'TEST DATA')
     });
 })
 
