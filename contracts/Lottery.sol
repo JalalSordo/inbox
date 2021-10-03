@@ -13,18 +13,18 @@ contract Lottery {
         players.push(msg.sender);
     }
 
-    function getCurrentBalance() public view returns (uint256) {
+    function getCurrentPrize() public view returns (uint256) {
         return address(this).balance;
     }
 
     function pickWinner() public onlyManagerCanCall {
-        require(msg.sender == manager);
         uint256 index = random() % players.length;
-        players[index].transfer(getCurrentBalance());
+        players[index].transfer(getCurrentPrize());
         players = new address[](0);
     }
 
     function random() private view returns (uint256) {
+        //TODO : needs more secure random algo.
         return uint256(keccak256(block.difficulty, now, players));
     }
 
@@ -32,4 +32,9 @@ contract Lottery {
         require(msg.sender == manager);
         _;
     }
+
+    function getAllPLayers() public view returns (address[]) {
+        return players;
+    }
+
 }
