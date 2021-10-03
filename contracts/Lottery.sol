@@ -3,6 +3,7 @@ pragma solidity ^0.4.17; //version to be used of solidity
 contract Lottery {
     address public manager;
     address[] public players;
+    address public lastWinner;
 
     constructor() public {
         manager = msg.sender;
@@ -20,6 +21,7 @@ contract Lottery {
     function pickWinner() public onlyManagerCanCall {
         uint256 index = random() % players.length;
         players[index].transfer(getCurrentPrize());
+        lastWinner = players[index];
         players = new address[](0);
     }
 
@@ -33,8 +35,7 @@ contract Lottery {
         _;
     }
 
-    function getAllPLayers() public view returns (address[]) {
+    function getAllPlayers() public view returns (address[]) {
         return players;
     }
-
 }
